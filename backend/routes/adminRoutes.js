@@ -7,10 +7,6 @@ const orderController=require('../controllers/orderController')
 // const tryCatch=require('../utils/tryCatch')
 
 
-router.post('/register', adminController.registerAdmin);
-router.post('/login', adminController.loginAdmin);
-
-
 router.get('/users/:id', authMiddleware, adminController.getUsers);
 router.patch('/users/:id/block', authMiddleware, adminController.updateUserBlockStatus);
 

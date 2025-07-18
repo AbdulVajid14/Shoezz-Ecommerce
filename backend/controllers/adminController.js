@@ -8,30 +8,6 @@ const tryCatch=require("../utils/tryCatch")
 const Cart=require('../models/Cart')
 const CustomError=require('../utils/customError')
 
-exports.registerAdmin =   tryCatch( async (req, res) => {
-  const { username, email, password } = req.body;
-  
-    let admin = await Admin.findOne({ email });
-    if (admin) throw new CustomError('Admin already exisst',400) 
-    admin = new Admin({ username, email, password });
-    await admin.save();
-    const accessToken = jwt.sign({ user: { id: admin.id } }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    const refreshToken = jwt.sign({ user: { id: admin.id } }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
-    await RefreshToken.create({ token: refreshToken, userId: admin.id });
-    res.json({msg:'Admin registered successfully'});
-});
-
-exports.loginAdmin = tryCatch(async (req,res)=>{
-  const {email,password} = req.body;
-    const admin = await Admin.findOne({email});
-    if (!admin) throw new CustomError('invalid credentails')
-    const isMatch = await admin.comparePassword(password);
-    if (!isMatch) throw new CustomError('invalid credentails')
-    const accessToken = jwt.sign({user:{id:admin.id}},process.env.JWT_SECRET,{expiresIn:'1h'});
-    const refreshToken = jwt.sign({user:{id:admin.id}},process.env.REFRESH_TOKEN_SECRET,{expiresIn:'7d'});
-    await RefreshToken.create({token:refreshToken,userId:admin.id});
-    res.json({msg:'admin logged in successfully',accessToken,refreshToken});
-});
 
 
 exports.getUsers = tryCatch(async (req, res) => {
