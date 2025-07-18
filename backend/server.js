@@ -20,8 +20,12 @@ const PORT=process.env.PORT || 5001;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(errorHandler)
+app.use(express.static(Path2D.join(__dirname, "frontend",'build'))); // Serve static files from the uploads directory
 connectDB()
  
+app.get('/', (req, res) => {
+  res.sendFile(Path.join(__dirname, 'frontend', 'build', 'index.html')); // Serve the React app
+});
 app.use('/api/users',userRoutes);
 app.use('/api/products',productRoutes);
 app.use('/api/cart',cartRoutes);
